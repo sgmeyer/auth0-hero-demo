@@ -5,7 +5,7 @@ var router = express.Router();
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback'
+  AUTH0_CALLBACK_URL: `http://${process.env.ROOT_DOMAIN}:${process.env.PORT}/callback`
 };
 
 /* GET home page. */
@@ -14,9 +14,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login',
-  function(req, res){
-    res.render('login', { env: env });
-  });
+  passport.authenticate('auth0', {}), function (req, res) {
+  res.redirect("/");
+});
 
 router.get('/logout', function(req, res){
   req.logout();
